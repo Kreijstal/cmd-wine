@@ -100,8 +100,8 @@ HELP without an argument shows all CMD built-in commands.\n"
 "IF is used to conditionally execute a command.\n\
 \n\
 Syntax: IF [NOT] EXIST filename command\n\
-\        IF [NOT] string1==string2 command\n\
-\        IF [NOT] ERRORLEVEL number command\n\
+        IF [NOT] string1==string2 command\n\
+        IF [NOT] ERRORLEVEL number command\n\
 \n\
 In the second form of the command, string1 and string2 must be in double\n\
 quotes. The comparison is not case-sensitive.\n"
@@ -186,7 +186,7 @@ start [options] program_filename [...]\n\
 start [options] document_filename\n\
 \n\
 Options:\n\
-\"title\"        Specifies the title of the child windows.\n\
+""title""        Specifies the title of the child windows.\n\
 /d directory   Start the program in the specified directory.\n\
 /b             Don't create a new console for the program.\n\
 /i             Start the program with fresh environment variables.\n\
