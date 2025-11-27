@@ -1,0 +1,56 @@
+# Standalone mingw/msys2 build for cmd.exe without the Wine build system.
+
+TARGET := cmd.exe
+SOURCES := batch.c builtins.c directory.c wcmdmain.c
+RESOURCE := cmd.rc
+RESOURCE_OBJ := cmd.res.o
+
+MINGW_CC_CANDIDATES := x86_64-w64-mingw32-gcc x86_64-w64-mingw32-clang
+MINGW_RC_CANDIDATES := x86_64-w64-mingw32-windres llvm-windres windres
+
+ifeq ($(OS),Windows_NT)
+  ifneq ($(filter default undefined,$(origin CC)),)
+    CC := cc
+  endif
+  ifneq ($(filter default undefined,$(origin WINDRES)),)
+    WINDRES := windres
+  endif
+else
+  ifneq ($(filter default undefined,$(origin CC)),)
+    CC := $(firstword $(foreach c,$(MINGW_CC_CANDIDATES),$(if $(shell command -v $(c)), $(c))))
+  endif
+  ifneq ($(filter default undefined,$(origin WINDRES)),)
+    WINDRES := $(firstword $(foreach c,$(MINGW_RC_CANDIDATES),$(if $(shell command -v $(c)), $(c))))
+  endif
+endif
+
+ifeq ($(CC),)
+  $(error No suitable mingw compiler found. Install x86_64-w64-mingw32-gcc or set CC)
+endif
+ifeq ($(WINDRES),)
+  $(error No suitable windres found. Install x86_64-w64-mingw32-windres or set WINDRES)
+endif
+
+DEFINES := -DUNICODE -D_UNICODE
+CFLAGS ?= -O2
+CFLAGS += -Wall -Wextra -Wno-unused-parameter $(DEFINES)
+LDFLAGS ?=
+LIBS := -lshell32 -luser32 -ladvapi32
+
+OBJS := $(SOURCES:.c=.o) $(RESOURCE_OBJ)
+
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) -mconsole -municode $(OBJS) $(LIBS) $(LDFLAGS) -o $@
+
+%.o: %.c wcmd.h wcmd_debug.h
+	$(CC) -mconsole -municode $(CFLAGS) -c $< -o $@
+
+$(RESOURCE_OBJ): $(RESOURCE) wcmd.h
+	$(WINDRES) $(RCFLAGS) $(RESOURCE) $(RESOURCE_OBJ)
+
+clean:
+	rm -f $(OBJS) $(TARGET)

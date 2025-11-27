@@ -20,7 +20,7 @@
  */
 
 #include "wcmd.h"
-#include "wine/debug.h"
+#include "wcmd_debug.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(cmd);
 

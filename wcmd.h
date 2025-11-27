@@ -31,6 +31,20 @@
 #include <ctype.h>
 #include <wchar.h>
 
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(array) (sizeof(array) / sizeof((array)[0]))
+#endif
+
+#ifndef __WINE_ALLOC_SIZE
+#define __WINE_ALLOC_SIZE(x)
+#endif
+#ifndef __WINE_DEALLOC
+#define __WINE_DEALLOC(x)
+#endif
+#ifndef __WINE_MALLOC
+#define __WINE_MALLOC
+#endif
+
 /* msdn specified max for Win XP */
 #define MAXSTRING 8192
 

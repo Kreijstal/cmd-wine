@@ -28,8 +28,9 @@
 
 #include <time.h>
 #include "wcmd.h"
+#include "wcmd_compat.h"
 #include "shellapi.h"
-#include "wine/debug.h"
+#include "wcmd_debug.h"
 
 WINE_DEFAULT_DEBUG_CHANNEL(cmd);
 
